@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const db = require("./config/db");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
 dotenv.config({ path: "./config/config.env" });
 db();
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/profile", profileRouter);
 
 app.listen(
   PORT,
