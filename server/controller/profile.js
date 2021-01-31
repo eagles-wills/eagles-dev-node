@@ -97,3 +97,33 @@ exports.createProfile = asyncHandler(async (req, res) => {
   profile.save();
   res.json(profile);
 });
+
+// method   POST
+// @desc    POST /api/v1/profile/experience
+// @access  private
+
+exports.createExperience = asyncHandler(async (req, res) => {
+  await check("company", "company is required").not().isEmpty().run(req);
+  await check("title", "title is required").not().isEmpty().run(req);
+  await check("location", "location is required").not().isEmpty().run(req);
+  await check("from", "from is required").not().isEmpty().run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() });
+  const { company, title, location, from, to, description } = req.body;
+  let profile = await Profile.findOne({ user: req.user.id }).populate("user", [
+    "name",
+    "avatar",
+  ]);
+  let newExp = { company, title, location, from, to, description };
+  profile.experience.unshift(newExp);
+  await profile.save();
+  res.json(profile);
+});
+// method   DELETE
+// @desc    DELETE /api/v1/profile/experience/:exp_id
+// @access  private
+
+exports.deleteExperience = asyncHandler(async (req, res) => {
+  let profile = await Profile.findOne({ user: req.uer.id });
+});

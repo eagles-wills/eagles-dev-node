@@ -3,6 +3,7 @@ const {
   getProfile,
   getCurrentUserProfile,
   createProfile,
+  createExperience,
 } = require("../controller/profile");
 const { auth } = require("../middleware/authentication");
 
@@ -11,5 +12,6 @@ router
   .get("/", getAllProfiles)
   .get("/me", auth, getProfile)
   .get("/user/:id", getCurrentUserProfile)
-  .post("/", auth, createProfile);
+  .post("/", auth, createProfile)
+  .post("/experience", auth, createExperience);
 module.exports = router;
