@@ -125,5 +125,13 @@ exports.createExperience = asyncHandler(async (req, res) => {
 // @access  private
 
 exports.deleteExperience = asyncHandler(async (req, res) => {
-  let profile = await Profile.findOne({ user: req.uer.id });
+  let profile = await (
+    await Profile.findOne({ user: req.user.id })
+  ).populate("user", ["name, avatar"]);
+  const removeIndex = profile.experience
+    .map((item) => item.id)
+    .indexOf(req.params.exp_id);
+  profile.experience.splice(removeIndex, 1);
+  await profile.save();
+  res.json(profile);
 });
