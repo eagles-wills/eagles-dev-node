@@ -7,6 +7,7 @@ const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const postRouter = require("./routes/post");
+const { errorHandler } = require("./middleware/error");
 dotenv.config({ path: "./config/config.env" });
 db();
 const app = express();
@@ -16,6 +17,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/profile", profileRouter);
 app.use("/api/v1/post", postRouter);
+app.use(errorHandler);
 
 app.listen(
   PORT,
