@@ -2,6 +2,7 @@ const { check, validationResult, body } = require("express-validator");
 const asyncHandler = require("../middleware/async");
 const Profile = require("../model/Profile");
 const request = require("request");
+const User = require("../model/User");
 // route   GET
 // @desc    GET /api/v1/profile
 // @access  public
@@ -192,4 +193,13 @@ exports.githubUsers = asyncHandler(async (req, res) => {
       return res.status(404).json({ msg: "No Github Profile Found" });
     res.json(JSON.parse(body));
   });
+});
+
+exports.deleteProfile = asyncHandler(async (req, res) => {
+  // delete post
+  // delete profile
+  await Profile.findOneAndDelete({ user: req.user.id });
+  // delete user
+  await User.findOneAndDelete({ _id: req.user.id });
+  res.json({ msg: "user account deleted" });
 });
