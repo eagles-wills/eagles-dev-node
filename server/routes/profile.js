@@ -7,6 +7,7 @@ const {
   deleteExperience,
   createEducation,
   deleteEducation,
+  githubUsers,
 } = require("../controller/profile");
 const { auth } = require("../middleware/authentication");
 
@@ -15,6 +16,7 @@ router
   .get("/", getAllProfiles)
   .get("/me", auth, getProfile)
   .get("/user/:id", getCurrentUserProfile)
+  .get("/github/:username", githubUsers)
   .post("/", auth, createProfile)
   .post("/experience", auth, createExperience)
   .delete("/experience/:exp_id", auth, deleteExperience)

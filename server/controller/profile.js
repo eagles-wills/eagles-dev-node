@@ -183,11 +183,11 @@ exports.deleteEducation = asyncHandler(async (req, res) => {
 
 exports.githubUsers = asyncHandler(async (req, res) => {
   const options = {
-    uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+    uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`,
     method: "GET",
     headers: { "user-agent": "node.js" },
   };
-  request(aptions, (error, response, body) => {
+  request(options, (error, response, body) => {
     if (error) console.error(error);
     if (response.statusCode !== 200)
       return res.status(404).json({ msg: "No Github Profile Found" });

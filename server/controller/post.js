@@ -48,3 +48,14 @@ exports.getPostById = asyncHandler(async (req, res) => {
   if (!post) return res.status(404).json({ msg: "post not found" });
   res.json(post);
 });
+
+// route   DELETE /api/v1/post/:id
+// @desc    delete post by id
+// @access  Private
+exports.deletePostById = asyncHandler(async (req, res) => {
+  const post = await Post.findOne({ user: req.params.id });
+  if (post.user.toString() !== req.user.id)
+    return res.status(401).json({ msg: "User Not Authorized" });
+  await post.remove();
+  res.json(post);
+});
