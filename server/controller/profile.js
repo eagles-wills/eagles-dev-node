@@ -1,8 +1,8 @@
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, body } = require("express-validator");
 const asyncHandler = require("../middleware/async");
 const Profile = require("../model/Profile");
-
-// method   GET
+const request = require("request");
+// route   GET
 // @desc    GET /api/v1/profile
 // @access  public
 exports.getAllProfiles = asyncHandler(async (req, res) => {
@@ -11,7 +11,7 @@ exports.getAllProfiles = asyncHandler(async (req, res) => {
   res.json(profiles);
 });
 
-// method   GET
+// route   GET
 // @desc    GET /api/v1/profile/me
 // @access  private
 exports.getProfile = asyncHandler(async (req, res) => {
@@ -24,7 +24,7 @@ exports.getProfile = asyncHandler(async (req, res) => {
   res.json(profile);
 });
 
-// method   GET
+// route   GET
 // @desc    GET /api/v1/profile/user/:id
 // @access  private
 exports.getCurrentUserProfile = asyncHandler(async (req, res) => {
@@ -36,7 +36,7 @@ exports.getCurrentUserProfile = asyncHandler(async (req, res) => {
   res.json(profile);
 });
 
-// method   POST
+// route   POST
 // @desc    POST /api/v1/profile
 // @access  private
 
@@ -98,7 +98,7 @@ exports.createProfile = asyncHandler(async (req, res) => {
   res.json(profile);
 });
 
-// method   POST
+// route   POST
 // @desc    POST /api/v1/profile/experience
 // @access  private
 
@@ -120,7 +120,7 @@ exports.createExperience = asyncHandler(async (req, res) => {
   await profile.save();
   res.json(profile);
 });
-// method   DELETE
+// route   DELETE
 // @desc    DELETE /api/v1/profile/experience/:exp_id
 // @access  private
 
@@ -134,4 +134,62 @@ exports.deleteExperience = asyncHandler(async (req, res) => {
   profile.experience.splice(removeIndex, 1);
   await profile.save();
   res.json(profile);
+});
+// route   POST
+// @desc    POST /api/v1/profile/education
+// @access  private
+
+exports.createEducation = asyncHandler(async (req, res) => {
+  await check("school", "school is required").not().isEmpty().run(req);
+  await check("degree", "degree is required").not().isEmpty().run(req);
+  await check("fieldofstudy", "field of study is required")
+    .not()
+    .isEmpty()
+    .run(req);
+  await check("from", "from is required").not().isEmpty().run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() });
+  const { school, degree, fieldofstudy, from, to } = req.body;
+  let profile = await Profile.findOne({ user: req.user.id }).populate("user", [
+    "name",
+    "avatar",
+  ]);
+  let newExp = { school, degree, fieldofstudy, from, to };
+  profile.education.unshift(newExp);
+  await profile.save();
+  res.json(profile);
+});
+// route   DELETE
+// @desc    DELETE /api/v1/profile/education/:edu_id
+// @access  private
+
+exports.deleteEducation = asyncHandler(async (req, res) => {
+  let profile = await (
+    await Profile.findOne({ user: req.user.id })
+  ).populate("user", ["name, avatar"]);
+  const removeIndex = profile.education
+    .map((item) => item.id)
+    .indexOf(req.params.exp_id);
+  profile.education.splice(removeIndex, 1);
+  await profile.save();
+  res.json(profile);
+});
+
+// route   GET
+// @desc    GET /api/v1/profile/github/:username
+// @access  public
+
+exports.githubUsers = asyncHandler(async (req, res) => {
+  const options = {
+    uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+    method: "GET",
+    headers: { "user-agent": "node.js" },
+  };
+  request(aptions, (error, response, body) => {
+    if (error) console.error(error);
+    if (response.statusCode !== 200)
+      return res.status(404).json({ msg: "No Github Profile Found" });
+    res.json(JSON.parse(body));
+  });
 });
