@@ -54,6 +54,7 @@ exports.getPostById = asyncHandler(async (req, res) => {
 // @access  Private
 exports.deletePostById = asyncHandler(async (req, res) => {
   const post = await Post.findOne({ user: req.params.id });
+  if (!post) return res.status(404).json({ msg: "post not found" });
   if (post.user.toString() !== req.user.id)
     return res.status(401).json({ msg: "User Not Authorized" });
   await post.remove();
