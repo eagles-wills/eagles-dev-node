@@ -22,13 +22,14 @@ const Navbar = ({ auth: { loading, authenticated }, logout }) => {
   const authLink = (
     <ul>
       <li>
-        <a href="#!" onClick={() => logout}>
+        <a href="#!" onClick={() => logout()}>
           <i className="fa fa-sign-out-alt"></i>{" "}
           <span className="hide-sm">logout</span>
         </a>
       </li>
     </ul>
   );
+
   return (
     <nav className="navbar bg-dark">
       <h1>
