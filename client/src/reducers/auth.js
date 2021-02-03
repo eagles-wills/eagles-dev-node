@@ -3,6 +3,7 @@ import {
   LOAD_USER,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
 } from "../actions/types";
@@ -25,6 +26,7 @@ const auth = (state = initState, { type, payload }) => {
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
+    case LOGOUT:
       localStorage.removeItem("token");
       return { ...state, token: null, authenticated: false, loading: false };
     default:

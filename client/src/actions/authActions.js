@@ -8,6 +8,7 @@ import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "./types";
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -67,4 +68,8 @@ export const login = (email, password) => async (dispatch) => {
     }
     dispatch({ type: LOGIN_FAIL });
   }
+};
+
+export const logout = () => async (dispatch) => {
+  dispatch({ type: LOGOUT });
 };
