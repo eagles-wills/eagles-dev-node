@@ -5,5 +5,7 @@ export { default as Register } from "./auth/Register";
 export { default as Login } from "./auth/Login";
 export { default as Alert } from "./alert/Alert";
 export { default as Dashboard } from "./Dashboard/Dashboard";
+export { default as DashboardActions } from "./Dashboard/DashboardActions";
 export { default as PrivateRoute } from "./route/PrivateRoute";
 export { default as CreateProfile } from "./profile-form/CreateProfile";
+export { default as EditProfile } from "./profile-form/EditProfile";

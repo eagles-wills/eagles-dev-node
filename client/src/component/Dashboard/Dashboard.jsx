@@ -4,6 +4,7 @@ import { getCurrentProfile } from "../../actions/profileActions";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { DashboardActions } from "..";
 
 const Dashboard = ({
   getCurrentProfile,
@@ -23,7 +24,9 @@ const Dashboard = ({
         <i className="fas fa-user"></i> Welcome {user && user.name}
       </p>
       {profile !== null ? (
-        <Fragment>profile</Fragment>
+        <Fragment>
+          <DashboardActions />
+        </Fragment>
       ) : (
         <Fragment>
           <p className="lead">

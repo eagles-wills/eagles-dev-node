@@ -4,6 +4,7 @@ import {
   Alert,
   CreateProfile,
   Dashboard,
+  EditProfile,
   Landing,
   Login,
   Navbar,
@@ -39,6 +40,11 @@ const App = () => {
                 exact
                 path="/create-profile"
                 component={CreateProfile}
+              />
+              <PrivateRoute
+                exact
+                path="/edit-profile"
+                component={EditProfile}
               />
             </Switch>
           </div>

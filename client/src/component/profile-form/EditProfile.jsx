@@ -1,10 +1,33 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom/cjs/react-router-dom.min";
-import { createProfile } from "../../actions/profileActions";
+import { createProfile, getCurrentProfile } from "../../actions/profileActions";
 import PropTypes from "prop-types";
 
-const CreateProfile = ({ createProfile, history }) => {
+const EditProfile = ({
+  createProfile,
+  history,
+  profile: { profile, loading },
+  getCurrentProfile,
+}) => {
+  useEffect(() => {
+    getCurrentProfile();
+    setFormData({
+      company: loading || !profile.company ? "" : profile.company,
+      website: loading || !profile.website ? "" : profile.website,
+      bio: loading || !profile.bio ? "" : profile.bio,
+      status: loading || !profile.status ? "" : profile.status,
+      githubusername:
+        loading || !profile.githubusername ? "" : profile.githubusername,
+      location: loading || !profile.location ? "" : profile.location,
+      skills: loading || !profile.skills ? "" : profile.skills.join(),
+      twitter: loading || !profile.socials ? "" : profile.socials.twitter,
+      facebook: loading || !profile.socials ? "" : profile.socials.facebook,
+      instagram: loading || !profile.socias ? "" : profile.socials.instagram,
+      youtube: loading || !profile.socials ? "" : profile.socials.youtube,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
   const [displaySocialInput, toggleSocialInput] = useState(false);
   const [formData, setFormData] = useState({
     status: "",
@@ -36,8 +59,9 @@ const CreateProfile = ({ createProfile, history }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const handleSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history);
+    createProfile(formData, history, true);
   };
+
   return (
     <Fragment>
       <h1 className="large text-primary">Create Your Profile</h1>
@@ -206,8 +230,15 @@ const CreateProfile = ({ createProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
 };
 
-export default connect(null, { createProfile })(withRouter(CreateProfile));
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  withRouter(EditProfile)
+);
