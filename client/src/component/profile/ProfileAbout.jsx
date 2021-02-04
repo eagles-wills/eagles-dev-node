@@ -10,7 +10,7 @@ const ProfileAbout = ({
 }) => {
   return (
     <div className="profile-about bg-light p-2">
-      <h2 className="text-primary">{name} bio</h2>
+      <h2 className="text-primary">{name.trim().split(" ")[0]}'s bio</h2>
       <p>{bio}</p>
       <div className="line"></div>
       <h2 className="text-primary">Skill Set</h2>
