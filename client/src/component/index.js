@@ -15,3 +15,6 @@ export { default as AddExperience } from "./profile-form/AddExperience";
 export { default as AddEducation } from "./profile-form/AddEducation";
 export { default as Profiles } from "./profiles/Profiles";
 export { default as ProfilesItem } from "./profiles/ProfilesItem";
+export { default as Profile } from "./profile/Profile";
+export { default as ProfileTop } from "./profile/ProfileTop";
+export { default as ProfileAbout } from "./profile/ProfileAbout";
