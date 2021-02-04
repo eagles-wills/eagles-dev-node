@@ -23,7 +23,7 @@ const EditProfile = ({
       skills: loading || !profile.skills ? "" : profile.skills.join(),
       twitter: loading || !profile.socials ? "" : profile.socials.twitter,
       facebook: loading || !profile.socials ? "" : profile.socials.facebook,
-      instagram: loading || !profile.socias ? "" : profile.socials.instagram,
+      instagram: loading || !profile.socials ? "" : profile.socials.instagram,
       youtube: loading || !profile.socials ? "" : profile.socials.youtube,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,8 +55,10 @@ const EditProfile = ({
     youtube,
     instagram,
   } = formData;
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     createProfile(formData, history, true);
@@ -233,6 +235,7 @@ const EditProfile = ({
 EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

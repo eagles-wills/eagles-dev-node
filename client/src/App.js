@@ -1,6 +1,8 @@
 import React, { Fragment, useEffect } from "react";
 import "./App.css";
 import {
+  AddEducation,
+  AddExperience,
   Alert,
   CreateProfile,
   Dashboard,
@@ -45,6 +47,16 @@ const App = () => {
                 exact
                 path="/edit-profile"
                 component={EditProfile}
+              />
+              <PrivateRoute
+                exact
+                path="/add-experience"
+                component={AddExperience}
+              />
+              <PrivateRoute
+                exact
+                path="/add-education"
+                component={AddEducation}
               />
             </Switch>
           </div>
