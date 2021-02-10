@@ -44,7 +44,7 @@ exports.getPost = asyncHandler(async (req, res) => {
 // @desc    get post by id
 // @access  Private
 exports.getPostById = asyncHandler(async (req, res) => {
-  const post = await Post.findOne({ user: req.params.id });
+  const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ msg: "post not found" });
   res.json(post);
 });
@@ -53,12 +53,13 @@ exports.getPostById = asyncHandler(async (req, res) => {
 // @desc    delete post by id
 // @access  Private
 exports.deletePostById = asyncHandler(async (req, res) => {
-  const post = await Post.findOne({ user: req.params.id });
+  const post = await Post.findById(req.params.id);
+  console.log(post);
   if (!post) return res.status(404).json({ msg: "post not found" });
   if (post.user.toString() !== req.user.id)
     return res.status(401).json({ msg: "User Not Authorized" });
   await post.remove();
-  res.json(post);
+  res.json({ msg: "post removed" });
 });
 
 // route   Put /api/v1/post/likes/:id
@@ -66,7 +67,9 @@ exports.deletePostById = asyncHandler(async (req, res) => {
 // @access  Private
 exports.likePosts = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
-  if (post.likes.filter((like) => like.user.toString() === req.user.id) > 0)
+  if (
+    post.likes.filter((like) => like.user.toString() === req.user.id).length > 0
+  )
     return res.status(400).json({ msg: "post already liked by this user" });
   post.likes.unshift({ user: req.user.id });
   await post.save();
@@ -77,7 +80,10 @@ exports.likePosts = asyncHandler(async (req, res) => {
 // @access  Private
 exports.unlikePosts = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
-  if ((post.likes.filter((like) => like.user.toString() === req.user.id) = 0))
+  if (
+    post.likes.filter((like) => like.user.toString() === req.user.id).length ===
+    0
+  )
     return res.status(400).json({ msg: "post yet to be liked by this user" });
   const removeIndex = post.likes
     .map((like) => like.user.toString())

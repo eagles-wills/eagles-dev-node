@@ -26,16 +26,17 @@ exports.createUser = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
-  const { name, email, password, avatar } = req.body;
+  const { name, email, password } = req.body;
   let user = await User.findOne({ email });
   if (user)
     return res
       .status(404)
       .json({ errors: [{ msg: "email is being used by another user" }] });
+  const avatar = gravatar.url("email", { s: "200", r: "pg", d: "mm" });
   const newUser = { name, email, password, avatar };
   user = await User.create(newUser);
   user.password = await bcrypt.hash(password, 10);
-  user.avatar = gravatar.url("email", { s: "200", r: "pg", d: "mm" });
+
   await user.save();
   console.log(user);
   const payload = { user: { id: user.id } };
